@@ -8,7 +8,8 @@
     "scripts": {
         "dev:backend": "npm run dev --workspace backend",
         "test:backend": "npm run test --workspace backend",
-        "test": "npm run test:backend"
+        "test": "npm run test:backend",
+        "dev:frontend": "npm run dev --workspace frontend"
     },
     "dependencies": {
         "cors": "^2.8.5",

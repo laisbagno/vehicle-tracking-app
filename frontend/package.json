@@ -10,8 +10,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "i18next": "^25.3.2",
+    "i18next-browser-languagedetector": "^8.2.0",
     "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "react-dom": "^19.1.0",
+    "react-i18next": "^15.6.0",
+    "react-router-dom": "^7.7.0",
+    "sass": "^1.89.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.30.1",
