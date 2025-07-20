@@ -18,9 +18,7 @@ export default function AppLayout({ children, sidebar, vehicleCard }: Props) {
         <aside className={styles.sidebar}>{sidebar}</aside>
         <div className={styles['map-container']}>
           {children}
-          {vehicleCard && (
-            <div className={styles.floatingCard}>{vehicleCard}</div>
-          )}
+          {vehicleCard && <div className={styles.floatingCard}>{vehicleCard}</div>}
         </div>
       </div>
     </div>

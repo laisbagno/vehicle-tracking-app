@@ -1,182 +1,177 @@
 @keyframes fadeSlideIn {
-    from {
-      transform: translateY(-50%) translateX(30px);
-      opacity: 0;
-    }
-    to {
-      transform: translateY(-50%) translateX(0);
-      opacity: 1;
-    }
+  from {
+    transform: translateY(-50%) translateX(30px);
+    opacity: 0;
   }
+  to {
+    transform: translateY(-50%) translateX(0);
+    opacity: 1;
+  }
+}
 .sidebar {
-    position: relative;
-    top: 50%;
-    transform: translateY(-50%);
-    left: 30px;
-    z-index: 1000;
-  
-    background-color: #ffffff;
-    padding: 2rem;
-    width: 300px;
-    height: fit-content;
-    border-radius: 12px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.30);
-  
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 30px;
+  z-index: 1000;
 
-    animation: fadeSlideIn 0.4s ease-out;
+  background-color: #ffffff;
+  padding: 2rem;
+  width: 300px;
+  height: fit-content;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
 
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  animation: fadeSlideIn 0.4s ease-out;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  label {
+    font-weight: 600;
+    font-size: 0.95rem;
   }
-  
-  .section {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  
-    label {
-      font-weight: 600;
-      font-size: 0.95rem;
-    }
-  
-    select {
-      padding: 0.6rem;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      font-size: 1rem;
-    }
-  }
-  
-  .button {
-    padding: 0.75rem 1.5rem;
-    border: none;
+
+  select {
+    padding: 0.6rem;
     border-radius: 6px;
-    background-color: #06449c;
-    color: white;
-    font-weight: bold;
+    border: 1px solid #ccc;
     font-size: 1rem;
-    cursor: pointer;
-    transition: background 0.2s ease-in-out;
-  
-    &:hover {
-      background-color: #005edb;
-    }
   }
-  
+}
+
+.button {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  background-color: #06449c;
+  color: white;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease-in-out;
+
+  &:hover {
+    background-color: #005edb;
+  }
+}
+
+.vehicleCard {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+  background-color: #f8f8f8;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  border-left: 4px solid #06449c;
+}
+
+.vehicleImage {
+  width: 90px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 8px;
+  background: #fff;
+  border: 1px solid #ddd;
+  flex-shrink: 0;
+}
+
+.vehicleDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.9rem;
+}
+
+.vehicleDetails p {
+  margin: 0;
+}
+
+.vehicleColorWrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.vehicleColor {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1px solid #aaa;
+}
+
+.colorLabel {
+  font-weight: bold;
+}
+
+@media (max-width: 768px) {
   .vehicleCard {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-top: 1rem;
-    background-color: #f8f8f8;
-    padding: 1rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-    transition: all 0.3s ease;
-    border-left: 4px solid #06449c;
-  }
-  
-  .vehicleImage {
-    width: 90px;
-    height: 90px;
-    object-fit: cover;
-    border-radius: 8px;
-    background: #fff;
-    border: 1px solid #ddd;
-    flex-shrink: 0;
-  }
-  
-  .vehicleDetails {
-    display: flex;
     flex-direction: column;
-    gap: 0.3rem;
-    font-size: 0.9rem;
-  }
-  
-  .vehicleDetails p {
-    margin: 0;
-  }
-  
-  .vehicleColorWrapper {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  
-  .vehicleColor {
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    border: 1px solid #aaa;
-  }
-  
-  .colorLabel {
-    font-weight: bold;
-  }
-  
-  @media (max-width: 768px) {
-    .vehicleCard {
-      flex-direction: column;
-      align-items: flex-start;
-    }
-  
-    .vehicleImage {
-      width: 100%;
-      max-width: 200px;
-      height: auto;
-      margin-bottom: 0.5rem;
-    }
-  
-    .vehicleDetails {
-      width: 100%;
-    }
-
-    select {
-        font-family: monospace;
-        white-space: pre-wrap; // permite quebra de linha dentro do option
-      }
+    align-items: flex-start;
   }
 
-  .rangeWrapper {
-    margin-top: 1.5rem;
-  
-    label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-weight: 500;
-      color: #1e1e1e;
-    }
-  
-    input[type="range"] {
-        -webkit-appearance: none;
-        width: 100%;
-        height: 6px;
-        background: linear-gradient(
-          to right,
-          #06449c var(--progress, 0%),
-          #ccc var(--progress, 0%)
-        );
-        border-radius: 4px;
-        outline: none;
-      
-        &::-webkit-slider-thumb {
-          -webkit-appearance: none;
-          appearance: none;
-          width: 18px;
-          height: 18px;
-          border-radius: 50%;
-          background: #06449c;
-          cursor: pointer;
-        }
-      
-        &::-moz-range-thumb {
-          width: 18px;
-          height: 18px;
-          border-radius: 50%;
-          background: #06449c;
-          cursor: pointer;
-          border: none;
-        }
-      }
+  .vehicleImage {
+    width: 100%;
+    max-width: 200px;
+    height: auto;
+    margin-bottom: 0.5rem;
   }
+
+  .vehicleDetails {
+    width: 100%;
+  }
+
+  select {
+    font-family: monospace;
+    white-space: pre-wrap; // permite quebra de linha dentro do option
+  }
+}
+
+.rangeWrapper {
+  margin-top: 1.5rem;
+
+  label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #1e1e1e;
+  }
+
+  input[type='range'] {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 6px;
+    background: linear-gradient(to right, #06449c var(--progress, 0%), #ccc var(--progress, 0%));
+    border-radius: 4px;
+    outline: none;
+
+    &::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #06449c;
+      cursor: pointer;
+    }
+
+    &::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #06449c;
+      cursor: pointer;
+      border: none;
+    }
+  }
+}

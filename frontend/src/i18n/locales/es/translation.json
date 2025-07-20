@@ -1,19 +1,18 @@
 {
-    "app": {
-      "title": "Seguimiento de Vehículos"
+  "app": {
+    "title": "Seguimiento de Vehículos"
+  },
+  "vehiclePlate": "Placa del vehículo",
+  "chooseOption": "Elegir",
+  "sidebar": {
+    "title": "Panel de Control",
+    "selectRoute": "Seleccionar Ruta",
+    "selectSpeed": "Seleccionar Velocidad",
+    "speeds": {
+      "10": "10 km/h",
+      "30": "30 km/h",
+      "60": "60 km/h"
     },
-    "vehiclePlate": "Placa del vehículo",
-    "chooseOption": "Elegir",
-    "sidebar": {
-      "title": "Panel de Control",
-      "selectRoute": "Seleccionar Ruta",
-      "selectSpeed": "Seleccionar Velocidad",
-      "speeds": {
-        "10": "10 km/h",
-        "30": "30 km/h",
-        "60": "60 km/h"
-      },
-      "play": "Iniciar"
-    }
+    "play": "Iniciar"
   }
-  
+}

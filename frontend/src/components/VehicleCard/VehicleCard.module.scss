@@ -1,80 +1,83 @@
 .vehicleCard {
-    position: absolute;
-    bottom: 0px;
-    right: 24px;
-    z-index: 1000;
-  
-    background-color: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
-    padding: 1rem;
-    width: 280px;
-  
-    display: flex;
-    flex-direction: row;
-    gap: 1rem;
-    align-items: center;
-  
-    opacity: 0;
-    transform: translateY(10px);
-    transition: opacity 0.3s ease, transform 0.3s ease;
-    pointer-events: none;
-    visibility: hidden;
-  }
-  
-  .visible {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
-    visibility: visible;
-  }
-  
-  .vehicleImage {
-    width: 80px;
-    height: 80px;
-    border-radius: 8px;
-    object-fit: cover;
-  }
-  
-  .vehicleDetails {
-    flex: 1;
-  
-    p {
-      margin: 0 0 4px 0;
-      font-size: 0.9rem;
-      color: #1e1e1e;
-    }
-  }
-  
-  .vehicleColorWrapper {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  
-  .colorLabel {
+  position: absolute;
+  bottom: 0px;
+  right: 24px;
+  z-index: 1000;
+
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  padding: 1rem;
+  width: 280px;
+
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  align-items: center;
+
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+  visibility: visible;
+}
+
+.vehicleImage {
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.vehicleDetails {
+  flex: 1;
+
+  p {
+    margin: 0 0 4px 0;
     font-size: 0.9rem;
     color: #1e1e1e;
+  }
 }
-  
-  .vehicleColor {
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    border: 1px solid #ccc;
-  }
-  
-  .fadeIn {
-    opacity: 1;
-    transform: translateY(0);
-    transition: opacity 0.3s ease, transform 0.3s ease;
-  }
-  
-  .fadeOut {
-    opacity: 0;
-    transform: translateY(10px);
-    transition: opacity 0.3s ease, transform 0.3s ease;
-  }
 
+.vehicleColorWrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
 
-  
+.colorLabel {
+  font-size: 0.9rem;
+  color: #1e1e1e;
+}
+
+.vehicleColor {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+}
+
+.fadeIn {
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+}
+
+.fadeOut {
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+}

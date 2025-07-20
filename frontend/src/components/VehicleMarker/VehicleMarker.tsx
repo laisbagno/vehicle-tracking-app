@@ -19,9 +19,7 @@ const VehicleMarker = ({ route }: VehicleMarkerProps) => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setPositionIndex((prev) =>
-        prev < route.length - 1 ? prev + 1 : prev
-      );
+      setPositionIndex((prev) => (prev < route.length - 1 ? prev + 1 : prev));
     }, 1000); // anima a cada segundo
 
     return () => clearInterval(interval);
@@ -37,9 +35,7 @@ const VehicleMarker = ({ route }: VehicleMarkerProps) => {
     iconSize: [50, 50],
   });
 
-  return (
-    <Marker position={[current.latitude, current.longitude]} icon={icon} />
-  );
+  return <Marker position={[current.latitude, current.longitude]} icon={icon} />;
 };
 
 // Função para ajustar a posição do sprite de acordo com a direção

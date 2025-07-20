@@ -12,10 +12,7 @@ const Speedometer = ({ speed, maxSpeed = 120 }: SpeedometerProps) => {
   return (
     <div className={styles.speedometer}>
       <div className={styles.arc}>
-        <div
-          className={styles.pointer}
-          style={{ transform: `rotate(${rotation}deg)` }}
-        />
+        <div className={styles.pointer} style={{ transform: `rotate(${rotation}deg)` }} />
       </div>
 
       <div className={styles.markers}>
