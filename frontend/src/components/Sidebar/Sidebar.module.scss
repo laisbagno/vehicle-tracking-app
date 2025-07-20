@@ -131,6 +131,11 @@
     .vehicleDetails {
       width: 100%;
     }
+
+    select {
+        font-family: monospace;
+        white-space: pre-wrap; // permite quebra de linha dentro do option
+      }
   }
 
   .rangeWrapper {

@@ -1,64 +1,123 @@
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from './Sidebar.module.scss';
 import Speedometer from '../Speedometer/Speedometer';
-import { useState } from 'react';
-
-// Simulação dos dados da API por enquanto
-const vehicleInfo = {
-  plate: 'BPZ4295',
-  vin: '34405892075660',
-  color: '#FFEB3B',
-  picture: {
-    address: 'https://s3.amazonaws.com/softruck.fleetview/production/picture/c571fb1e-3906-4ee3-b4c4-7be9ad031d33_Semtítulo.png'
-  }
-};
+import { fetchRoutes } from '../../services/api';
+import type { RouteData } from '../../types/RouteData';
 
 interface SidebarProps {
-    onSelectVehicle: (vehicle: typeof vehicleInfo | null) => void;
-  }
+  onSelectVehicle: (vehicle: RouteData['vehicle'] | null) => void;
+  onSelectRoute: (coordinates: [number, number][] | null) => void;
+}
 
-const Sidebar = ({ onSelectVehicle }: SidebarProps) => {
+const Sidebar = ({ onSelectVehicle, onSelectRoute  }: SidebarProps) => {
   const { t } = useTranslation();
   const [speed, setSpeed] = useState(60);
+  const [routeData, setRouteData] = useState<RouteData | null>(null);
+  const [selectedCourseIndex, setSelectedCourseIndex] = useState<string>(''); // '' = todas
 
-  const handleSpeedChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newSpeed = Number(event.target.value);
-    setSpeed(newSpeed);
+  useEffect(() => {
+    fetchRoutes()
+      .then((data) => {
+        setRouteData(data);
+        onSelectVehicle(null);
+      })
+      .catch((error) => {
+        console.error('Erro ao buscar rotas:', error);
+      });
+  }, []);
+
+  const handleSpeedChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSpeed(Number(e.target.value));
   };
+
+  const selectedCourse =
+  selectedCourseIndex === '' || selectedCourseIndex === 'all'
+    ? null
+    : routeData?.courses?.[Number(selectedCourseIndex)];
+
+  const displaySpeed = selectedCourse?.speed_avg ?? routeData?.speed_avg ?? 0;
+
+  console.log('routeData', routeData)
+
 
   return (
     <aside className={styles.sidebar}>
       <h2>{t('sidebar.title')}</h2>
 
       <div className={styles.section}>
-        <label htmlFor="vehicle">{t('sidebar.selectVehicle') || 'Selecione o veículo'}</label>
+        <label htmlFor="vehicle">{t('sidebar.selectVehicle')}</label>
         <select
           id="vehicle"
           name="vehicle"
           onChange={(e) => {
             const value = e.target.value;
-            if (value === '') {
-              onSelectVehicle(null); // limpa o card
-            } else {
-              onSelectVehicle(vehicleInfo); // simulação por enquanto
-            }
-          }}// simulação por enquanto
+            onSelectVehicle(value ? routeData?.vehicle ?? null : null);
+          }}
         >
           <option value="">{t('chooseOption')}</option>
-          <option value={vehicleInfo.plate}>{vehicleInfo.plate}</option>
+          {routeData?.vehicle && (
+            <option value={routeData.vehicle.plate}>
+              {routeData.vehicle.plate}
+            </option>
+          )}
         </select>
       </div>
 
       <div className={styles.section}>
         <label htmlFor="route">{t('sidebar.selectRoute')}</label>
-        <select id="route" name="route">
-          <option value="">{t('chooseOption')}</option>
-          {/* Adicione as opções reais dinamicamente depois */}
+        <select
+            id="route"
+            name="route"
+            value={selectedCourseIndex}
+            onChange={(e) => {
+                const index = e.target.value;
+                setSelectedCourseIndex(index);
+                const course = routeData?.courses[Number(index)];
+                const gps = course?.gps ?? [];
+
+                const coords =
+                index === '' || index === 'all'
+                    ? null
+                    : gps.length > 0
+                    ? gps.map((p) => [p.latitude, p.longitude] as [number, number])
+                    : null;
+
+                onSelectRoute(coords);
+            }}  >
+            {/* Escolher como padrão */}
+            <option value="">{t('chooseOption')}</option>
+
+            {/* Todas as rotas */}
+            {routeData && (
+            <option value="all">
+                {`Todas as rotas  |  ${(routeData.total_distance / 1000).toFixed(1)}km - ${Math.ceil(routeData.total_time / 60)}min |
+                ${new Date(routeData.accOn).toLocaleDateString('pt-BR')}`}
+            </option>
+            )}
+
+            {/* Rotas individuais */}
+            {routeData?.courses?.map((course, idx) => {
+            const start = new Date(course.start_at);
+            const formattedDate = start.toLocaleDateString('pt-BR');
+            const formattedTime = start.toLocaleTimeString('pt-BR', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+
+            return (
+                <option key={idx} value={String(idx)}>
+                    {`Rota ${idx + 1}  |  ${(course.distance / 1000).toFixed(1)}km - ${Math.ceil(course.duration / 60)}min |
+                    ${formattedDate} - ${formattedTime}`}
+                </option>
+            );
+        })}
         </select>
       </div>
 
+
       <div className={styles.section}>
-        <Speedometer speed={speed} />
+        <Speedometer speed={displaySpeed} />
       </div>
 
       <div className={styles.rangeWrapper}>

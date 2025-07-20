@@ -6,7 +6,7 @@
   
     background-color: #ffffff;
     border-radius: 12px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.30);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
     padding: 1rem;
     width: 280px;
   
@@ -15,7 +15,18 @@
     gap: 1rem;
     align-items: center;
   
-    // animation: slideIn 0.3s ease-out;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+    visibility: hidden;
+  }
+  
+  .visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+    visibility: visible;
   }
   
   .vehicleImage {
@@ -53,16 +64,17 @@
     border: 1px solid #ccc;
   }
   
-//   @keyframes slideIn {
-//     from {
-//       opacity: 0;
-//       transform: translateY(30px);
-//     }
-//     to {
-//       opacity: 1;
-//       transform: translateY(0);
-//     }
-//   }
+  .fadeIn {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+  
+  .fadeOut {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
 
 
   

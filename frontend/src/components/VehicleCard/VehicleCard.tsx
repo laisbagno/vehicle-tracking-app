@@ -1,5 +1,3 @@
-// src/components/VehicleCard/VehicleCard.tsx
-
 import styles from './VehicleCard.module.scss';
 
 interface Props {
@@ -7,17 +5,15 @@ interface Props {
   vin: string;
   color: string;
   pictureUrl?: string;
-  visible: boolean; // <- Adiciona aqui
+  visible: boolean;
 }
 
 export default function VehicleCard({ plate, vin, color, pictureUrl, visible }: Props) {
   return (
     <div
-        className={`${styles.vehicleCard} ${styles['vehicle-fade']} ${
-        visible ? styles['fade-in'] : styles['fade-out']
-        }`}
-    >      
-    {pictureUrl && (
+    className={`${styles.vehicleCard} ${visible ? styles.visible : null}`}
+    >
+      {pictureUrl && (
         <img
           src={pictureUrl}
           alt={`Veículo ${plate}`}

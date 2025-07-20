@@ -1,9 +1,19 @@
 {
-    "welcome": "Welcome",
-    "start": "Start",
-    "vehicleTracking": "Vehicle Tracking",
     "app": {
       "title": "Vehicle Tracking"
+    },
+    "vehiclePlate": "Vehicle Plate",
+    "chooseOption": "Choose",
+    "sidebar": {
+      "title": "Control Panel",
+      "selectRoute": "Select Route",
+      "selectSpeed": "Select Speed",
+      "speeds": {
+        "10": "10 km/h",
+        "30": "30 km/h",
+        "60": "60 km/h"
+      },
+      "play": "Start"
     }
   }
   

@@ -1,9 +1,19 @@
 {
-    "welcome": "Bem-vindo",
-    "start": "Iniciar",
-    "vehicleTracking": "Rastreamento de Veículos",
     "app": {
       "title": "Rastreamento de Veículos"
+    },
+    "vehiclePlate": "Placa do veículo",
+    "chooseOption": "Escolher",
+    "sidebar": {
+      "title": "Painel de Controle",
+      "selectRoute": "Selecionar Rota",
+      "selectSpeed": "Selecionar Velocidade",
+      "speeds": {
+        "10": "10 km/h",
+        "30": "30 km/h",
+        "60": "60 km/h"
+      },
+      "play": "Iniciar"
     }
   }
   

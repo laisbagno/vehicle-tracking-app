@@ -18,6 +18,7 @@ export default function Home() {
     const [selectedVehicle, setSelectedVehicle] = useState<typeof MOCK_VEHICLE | null>(null);
 const [visibleVehicle, setVisibleVehicle] = useState<typeof MOCK_VEHICLE | null>(null);
 const [isVisible, setIsVisible] = useState(false);
+const [selectedRouteCoords, setSelectedRouteCoords] = useState<[number, number][] | null>(null);
 
 useEffect(() => {
   if (selectedVehicle) {
@@ -31,24 +32,23 @@ useEffect(() => {
   }
 }, [selectedVehicle]);
 
+console.log('selectedRouteCoords',selectedRouteCoords)
+
     return (
-    <AppLayout
-        sidebar={<Sidebar onSelectVehicle={setSelectedVehicle} />}
+        <AppLayout
+        sidebar={<Sidebar onSelectVehicle={setSelectedVehicle}   onSelectRoute={setSelectedRouteCoords}
+        />}
         vehicleCard={
-        visibleVehicle ? (
-            <div className={`vehicle-fade ${isVisible ? 'fade-in' : 'fade-out'}`}>
-            <VehicleCard
-                plate={visibleVehicle.plate}
-                vin={visibleVehicle.vin}
-                color={visibleVehicle.color}
-                pictureUrl={visibleVehicle.picture?.address}
-                visible={true}
-            />
-            </div>
-        ) : null
+          <VehicleCard
+            plate={selectedVehicle?.plate || ''}
+            vin={selectedVehicle?.vin || ''}
+            color={selectedVehicle?.color || '#ccc'}
+            pictureUrl={selectedVehicle?.picture?.address}
+            visible={!!selectedVehicle}
+          />
         }
-    >
-        <MapView />
-    </AppLayout>
+      >
+        <MapView coordinates={selectedRouteCoords} />
+      </AppLayout>
     );
 }
