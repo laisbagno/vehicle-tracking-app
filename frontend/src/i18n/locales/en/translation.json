@@ -7,12 +7,20 @@
   "sidebar": {
     "title": "Control Panel",
     "selectRoute": "Select Route",
+    "selectVehicle": "Select Vehicle",
     "selectSpeed": "Select Speed",
-    "speeds": {
-      "10": "10 km/h",
-      "30": "30 km/h",
-      "60": "60 km/h"
-    },
-    "play": "Start"
-  }
+    "route": "Route",
+    "duration": "Duration",
+    "distance": "Distance",
+    "date": "Date",
+    "time": "Time",
+    "play": "Start",
+    "reset": "Reset"
+  },
+  "vehicle": {
+  "plate": "Plate",
+  "vin": "VIN",
+  "color": "Color",
+  "imageAlt": "Vehicle {{plate}}"
+}
 }

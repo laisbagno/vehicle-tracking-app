@@ -101,7 +101,7 @@ const Sidebar = ({ onSelectVehicle, onSelectRoute, onStart, onReset }: SidebarPr
             {routeData?.courses?.map((course, idx) => {
               return (
                 <option key={idx} value={String(idx)}>
-                  {`Rota ${idx + 1}  |  ${(course.distance / 1000).toFixed(1)}km - ${Math.ceil(course.duration / 60)}min`}
+                  {`${t('sidebar.route')} ${idx + 1}  |  ${(course.distance / 1000).toFixed(1)}km - ${Math.ceil(course.duration / 60)}min`}
                 </option>
               );
             })}
@@ -126,17 +126,19 @@ const Sidebar = ({ onSelectVehicle, onSelectRoute, onStart, onReset }: SidebarPr
 
               <div className={styles.infoBlock}>
                 <div>
-                  <strong>Duração:</strong> {Math.ceil(currentCourse.duration / 60)} min
+                  <strong>{t('sidebar.duration')}:</strong> {Math.ceil(currentCourse.duration / 60)}{' '}
+                  min
                 </div>
                 <div>
-                  <strong>Distância:</strong> {(currentCourse.distance / 1000).toFixed(1)} km
+                  <strong>{t('sidebar.distance')}:</strong>{' '}
+                  {(currentCourse.distance / 1000).toFixed(1)} km
                 </div>
                 <div>
-                  <strong>Data:</strong>{' '}
+                  <strong>{t('sidebar.date')}:</strong>{' '}
                   {new Date(currentCourse.start_at).toLocaleDateString('pt-BR')}
                 </div>
                 <div>
-                  <strong>Hora:</strong>{' '}
+                  <strong>{t('sidebar.time')}:</strong>{' '}
                   {new Date(currentCourse.start_at).toLocaleTimeString('pt-BR', {
                     hour: '2-digit',
                     minute: '2-digit',
@@ -145,16 +147,16 @@ const Sidebar = ({ onSelectVehicle, onSelectRoute, onStart, onReset }: SidebarPr
               </div>
             </div>
           )}
-          <div className={styles.buttons}>
-            <button className={styles.button} onClick={onStart}>
-              {t('sidebar.play')}
-            </button>
-            {selectedVehicle && selectedCourseIndex && (
+          {selectedVehicle && selectedCourseIndex && (
+            <div className={styles.buttons}>
+              <button className={styles.button} onClick={onStart}>
+                {t('sidebar.play')}
+              </button>
               <button className={styles.button} onClick={onReset}>
                 {t('sidebar.reset')}
               </button>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       )}
     </aside>

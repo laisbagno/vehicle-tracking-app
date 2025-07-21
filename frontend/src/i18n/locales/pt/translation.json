@@ -7,12 +7,20 @@
   "sidebar": {
     "title": "Painel de Controle",
     "selectRoute": "Selecionar Rota",
+    "selectVehicle": "Selecionar Veículo",
     "selectSpeed": "Selecionar Velocidade",
-    "speeds": {
-      "10": "10 km/h",
-      "30": "30 km/h",
-      "60": "60 km/h"
-    },
-    "play": "Iniciar"
-  }
+    "route": "Rota",
+    "duration": "Duração",
+    "distance": "Distância",
+    "date": "Data",
+    "time": "Hora",
+    "play": "Iniciar",
+    "reset": "Reiniciar"
+  },
+  "vehicle": {
+  "plate": "Placa",
+  "vin": "VIN",
+  "color": "Cor",
+  "imageAlt": "Veículo {{plate}}"
+}
 }
