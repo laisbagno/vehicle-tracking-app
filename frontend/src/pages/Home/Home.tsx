@@ -4,6 +4,7 @@ import AppLayout from '../../components/layouts/AppLayout';
 import Sidebar from '../../components/Sidebar/Sidebar';
 import MapView from '../../components/MapView/MapView';
 import VehicleCard from '../../components/VehicleCard/VehicleCard';
+import type { GpsPoint } from '../../types/RouteData';
 
 const MOCK_VEHICLE = {
   plate: 'BPZ4295',
@@ -20,6 +21,8 @@ export default function Home() {
   const [visibleVehicle, setVisibleVehicle] = useState<typeof MOCK_VEHICLE | null>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [selectedRouteCoords, setSelectedRouteCoords] = useState<[number, number][] | null>(null);
+  const [selectedRouteGps, setSelectedRouteGps] = useState<GpsPoint[] | null>(null);
+  const [startAnimation, setStartAnimation] = useState(false);
 
   useEffect(() => {
     if (selectedVehicle) {
@@ -38,7 +41,15 @@ export default function Home() {
   return (
     <AppLayout
       sidebar={
-        <Sidebar onSelectVehicle={setSelectedVehicle} onSelectRoute={setSelectedRouteCoords} />
+        <Sidebar
+          onSelectVehicle={setSelectedVehicle}
+          onSelectRoute={({ coordinates, gps }) => {
+            setSelectedRouteCoords(coordinates);
+            setSelectedRouteGps(gps);
+            setStartAnimation(false);
+          }}
+          onStart={() => setStartAnimation(true)}
+        />
       }
       vehicleCard={
         <VehicleCard
@@ -50,7 +61,11 @@ export default function Home() {
         />
       }
     >
-      <MapView coordinates={selectedRouteCoords} />
+      <MapView
+        coordinates={selectedRouteCoords}
+        gps={selectedRouteGps ?? undefined}
+        animate={startAnimation}
+      />
     </AppLayout>
   );
 }

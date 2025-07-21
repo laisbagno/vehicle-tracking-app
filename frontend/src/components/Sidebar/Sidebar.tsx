@@ -4,17 +4,22 @@ import styles from './Sidebar.module.scss';
 import Speedometer from '../Speedometer/Speedometer';
 import { fetchRoutes } from '../../services/api';
 import type { RouteData } from '../../types/RouteData';
+import { parseGpsToCoords } from '../../utils/parseGpsToCoords';
 
 interface SidebarProps {
   onSelectVehicle: (vehicle: RouteData['vehicle'] | null) => void;
-  onSelectRoute: (coordinates: [number, number][] | null) => void;
+  onSelectRoute: (data: {
+    coordinates: [number, number][] | null;
+    gps: RouteData['courses'][0]['gps'] | null;
+  }) => void;
+  onStart?: () => void;
 }
 
-const Sidebar = ({ onSelectVehicle, onSelectRoute }: SidebarProps) => {
+const Sidebar = ({ onSelectVehicle, onSelectRoute, onStart }: SidebarProps) => {
   const { t } = useTranslation();
   const [speed, setSpeed] = useState(60);
   const [routeData, setRouteData] = useState<RouteData | null>(null);
-  const [selectedCourseIndex, setSelectedCourseIndex] = useState<string>(''); // '' = todas
+  const [selectedCourseIndex, setSelectedCourseIndex] = useState<string>('');
 
   useEffect(() => {
     fetchRoutes()
@@ -70,17 +75,13 @@ const Sidebar = ({ onSelectVehicle, onSelectRoute }: SidebarProps) => {
           onChange={(e) => {
             const index = e.target.value;
             setSelectedCourseIndex(index);
-            const course = routeData?.courses[Number(index)];
-            const gps = course?.gps ?? [];
+            const course =
+              index === '' || index === 'all' ? null : routeData?.courses[Number(index)];
 
-            const coords =
-              index === '' || index === 'all'
-                ? null
-                : gps.length > 0
-                  ? gps.map((p) => [p.latitude, p.longitude] as [number, number])
-                  : null;
-
-            onSelectRoute(coords);
+            onSelectRoute({
+              coordinates: course?.gps?.map((point) => [point.latitude, point.longitude]) ?? null,
+              gps: course?.gps ?? null,
+            });
           }}
         >
           {/* Escolher como padrão */}
@@ -132,7 +133,9 @@ const Sidebar = ({ onSelectVehicle, onSelectRoute }: SidebarProps) => {
         />
       </div>
 
-      <button className={styles.button}>{t('sidebar.play')}</button>
+      <button className={styles.button} onClick={onStart}>
+        {t('sidebar.play')}
+      </button>
     </aside>
   );
 };
