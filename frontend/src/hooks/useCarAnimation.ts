@@ -16,69 +16,94 @@ function interpolate(start: number, end: number, t: number) {
   return start + (end - start) * t;
 }
 
+function calculateBearing(start: [number, number], end: [number, number]): number {
+  const [lat1, lon1] = start;
+  const [lat2, lon2] = end;
+
+  const dLon = (lon2 - lon1) * (Math.PI / 180);
+  const y = Math.sin(dLon) * Math.cos(lat2 * (Math.PI / 180));
+  const x =
+    Math.cos(lat1 * (Math.PI / 180)) * Math.sin(lat2 * (Math.PI / 180)) -
+    Math.sin(lat1 * (Math.PI / 180)) *
+      Math.cos(lat2 * (Math.PI / 180)) *
+      Math.cos(dLon);
+
+  const brng = Math.atan2(y, x);
+  return (brng * 180) / Math.PI >= 0
+    ? (brng * 180) / Math.PI
+    : (brng * 180) / Math.PI + 360;
+}
+
 export function useCarAnimation({ gpsPoints, speed, enabled = true }: UseCarAnimationProps) {
   const [currentPosition, setCurrentPosition] = useState<[number, number] | null>(null);
-  const [direction, setDirection] = useState<number>(290);
+  const [direction, setDirection] = useState<number>(0);
+
   const indexRef = useRef(0);
-  const requestRef = useRef<number | null>(null);
-  const startTimeRef = useRef<number | null>(null);
+  const animationFrameRef = useRef<number | null>(null);
+  const lastTimeRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (gpsPoints.length > 0) {
+      setCurrentPosition([gpsPoints[0].latitude, gpsPoints[0].longitude]);
+  
+      const next = gpsPoints[1];
+      if (next) {
+        const angle = calculateBearing(
+          [gpsPoints[0].latitude, gpsPoints[0].longitude],
+          [next.latitude, next.longitude]
+        );
+        setDirection(angle);
+      } else {
+        setDirection(gpsPoints[0].direction ?? 0);
+      }
+    } else {
+      setCurrentPosition(null);
+      setDirection(0);
+    }
+  }, [gpsPoints]);
 
   useEffect(() => {
     if (!enabled || gpsPoints.length < 2) return;
 
     indexRef.current = 0;
-    startTimeRef.current = null;
+    lastTimeRef.current = null;
 
     const animate = (timestamp: number) => {
-      if (!startTimeRef.current) {
-        startTimeRef.current = timestamp;
-      }
+      if (lastTimeRef.current === null) lastTimeRef.current = timestamp;
 
-      const elapsed = timestamp - startTimeRef.current;
+      const elapsed = timestamp - lastTimeRef.current;
       const progress = elapsed / speed;
 
-      const currentIndex = indexRef.current;
-      const nextIndex = currentIndex + 1;
+      const i = indexRef.current;
+      if (i >= gpsPoints.length - 1) return;
 
-      if (nextIndex >= gpsPoints.length) {
-        cancelAnimationFrame(requestRef.current!);
-        return;
-      }
+      const start = gpsPoints[i];
+      const end = gpsPoints[i + 1];
 
-      const current = gpsPoints[currentIndex];
-      const next = gpsPoints[nextIndex];
-
-      const lat = interpolate(current.latitude, next.latitude, progress);
-      const lng = interpolate(current.longitude, next.longitude, progress);
-      const dir = interpolate(current.direction, next.direction, progress);
+      const lat = interpolate(start.latitude, end.latitude, progress);
+      const lng = interpolate(start.longitude, end.longitude, progress);
 
       setCurrentPosition([lat, lng]);
-      setDirection(dir);
+
+      const angle = calculateBearing([start.latitude, start.longitude], [end.latitude, end.longitude]);
+      setDirection(angle);
 
       if (progress >= 1) {
         indexRef.current += 1;
-        startTimeRef.current = timestamp;
+        lastTimeRef.current = timestamp;
       }
 
-      requestRef.current = requestAnimationFrame(animate);
+      animationFrameRef.current = requestAnimationFrame(animate);
     };
 
-    requestRef.current = requestAnimationFrame(animate);
+    animationFrameRef.current = requestAnimationFrame(animate);
 
     return () => {
-      if (requestRef.current) {
-        cancelAnimationFrame(requestRef.current);
+      if (animationFrameRef.current !== null) {
+        cancelAnimationFrame(animationFrameRef.current);
       }
     };
   }, [gpsPoints, speed, enabled]);
-
-  // Exibe o carro parado no início da rota
-  useEffect(() => {
-    if (gpsPoints.length > 0) {
-      setCurrentPosition([gpsPoints[0].latitude, gpsPoints[0].longitude]);
-      setDirection(gpsPoints[0].direction ?? 0);
-    }
-  }, [gpsPoints]);
 
   return { currentPosition, direction };
 }
