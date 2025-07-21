@@ -4,11 +4,13 @@ interface GpsPoint {
   latitude: number;
   longitude: number;
   direction: number;
+  acquisition_time_unix: number;
 }
 
 interface UseCarAnimationProps {
   gpsPoints: GpsPoint[];
-  speed: number; // milissegundos entre pontos
+  stopPoints?: [number, number, number][]; // [longitude, latitude, acquisition_time_unix]
+  speed: number; // fator multiplicador (1 = tempo real, 2 = dobro da velocidade, etc)
   enabled?: boolean;
 }
 
@@ -29,23 +31,27 @@ function calculateBearing(start: [number, number], end: [number, number]): numbe
       Math.cos(dLon);
 
   const brng = Math.atan2(y, x);
-  return (brng * 180) / Math.PI >= 0
-    ? (brng * 180) / Math.PI
-    : (brng * 180) / Math.PI + 360;
+  return brng >= 0 ? (brng * 180) / Math.PI : (brng * 180) / Math.PI + 360;
 }
 
-export function useCarAnimation({ gpsPoints, speed, enabled = true }: UseCarAnimationProps) {
+export function useCarAnimation({
+  gpsPoints,
+  stopPoints = [],
+  speed,
+  enabled = true
+}: UseCarAnimationProps) {
   const [currentPosition, setCurrentPosition] = useState<[number, number] | null>(null);
   const [direction, setDirection] = useState<number>(0);
 
   const indexRef = useRef(0);
   const animationFrameRef = useRef<number | null>(null);
+  const pauseTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const lastTimeRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (gpsPoints.length > 0) {
       setCurrentPosition([gpsPoints[0].latitude, gpsPoints[0].longitude]);
-  
+
       const next = gpsPoints[1];
       if (next) {
         const angle = calculateBearing(
@@ -71,18 +77,37 @@ export function useCarAnimation({ gpsPoints, speed, enabled = true }: UseCarAnim
     const animate = (timestamp: number) => {
       if (lastTimeRef.current === null) lastTimeRef.current = timestamp;
 
-      const elapsed = timestamp - lastTimeRef.current;
-      const progress = elapsed / speed;
-
       const i = indexRef.current;
       if (i >= gpsPoints.length - 1) return;
 
       const start = gpsPoints[i];
       const end = gpsPoints[i + 1];
 
+      // Detecta se o ponto atual é uma parada
+      const isStopPoint = stopPoints.some(
+        ([lon, lat, time]) =>
+          lat === start.latitude &&
+          lon === start.longitude &&
+          time === start.acquisition_time_unix
+      );
+
+      if (isStopPoint && !pauseTimeoutRef.current) {
+        pauseTimeoutRef.current = setTimeout(() => {
+          pauseTimeoutRef.current = null;
+          indexRef.current += 1;
+          lastTimeRef.current = null;
+          animationFrameRef.current = requestAnimationFrame(animate);
+        }, 2000); // pausa de 2 segundos
+        return;
+      }
+
+      const elapsed = timestamp - lastTimeRef.current;
+      const timeDelta = (end.acquisition_time_unix - start.acquisition_time_unix) * 1000;
+      const adjustedDuration = timeDelta / speed;
+      const progress = elapsed / adjustedDuration;
+
       const lat = interpolate(start.latitude, end.latitude, progress);
       const lng = interpolate(start.longitude, end.longitude, progress);
-
       setCurrentPosition([lat, lng]);
 
       const angle = calculateBearing([start.latitude, start.longitude], [end.latitude, end.longitude]);
@@ -102,8 +127,11 @@ export function useCarAnimation({ gpsPoints, speed, enabled = true }: UseCarAnim
       if (animationFrameRef.current !== null) {
         cancelAnimationFrame(animationFrameRef.current);
       }
+      if (pauseTimeoutRef.current !== null) {
+        clearTimeout(pauseTimeoutRef.current);
+      }
     };
-  }, [gpsPoints, speed, enabled]);
+  }, [gpsPoints, speed, enabled, stopPoints]);
 
   return { currentPosition, direction };
 }

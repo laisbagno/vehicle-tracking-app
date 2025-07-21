@@ -1,9 +1,12 @@
 // src/components/MapView/MapView.tsx
-import { MapContainer, TileLayer, ZoomControl, Polyline, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, ZoomControl, Polyline, useMap, Marker } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import CarMarker from '../CarMarker/CarMarker';
 import { useCarAnimation } from '../../hooks/useCarAnimation';
+import destinationIconUrl from '../../assets/destination.svg';
+import L from 'leaflet';
+import stopIconUrl from '../../assets/stop_icon.png';
 
 interface MapViewProps {
   coordinates: [number, number][] | null;
@@ -12,10 +15,23 @@ interface MapViewProps {
     longitude: number;
     direction: number;
   }[];
+  stopPoints?: [number, number, number][]; // <- Novo!
   animate?: boolean;
 }
 
-export default function MapView({ coordinates, gps, animate }: MapViewProps) {
+const destinationIcon = L.icon({
+  iconUrl: destinationIconUrl,
+  iconSize: [26, 26],
+  iconAnchor: [13, 30],
+});
+
+const stopIcon = L.icon({
+  iconUrl: stopIconUrl,
+  iconSize: [26, 26],
+  iconAnchor: [13, 30],
+});
+
+export default function MapView({ coordinates, gps, stopPoints, animate }: MapViewProps) {
   console.log('GPS PASSED:', gps);
   function RoutePolyline({ coordinates }: { coordinates: [number, number][] }) {
     const map = useMap();
@@ -30,10 +46,52 @@ export default function MapView({ coordinates, gps, animate }: MapViewProps) {
 
   const { currentPosition, direction } = useCarAnimation({
     gpsPoints: gps ?? [],
-    speed: 500,
+    stopPoints: stopPoints ?? [],
+    speed: 50,
     enabled: animate,
   });
-  console.log('CAR POSITION:', currentPosition, direction);
+  console.log('gps:', gps, direction);
+
+  const [currentStop, setCurrentStop] = useState<[number, number] | null>(null);
+
+  useEffect(() => {
+    if (!currentPosition || !stopPoints || stopPoints.length === 0 || !gps || gps.length === 0) {
+      setCurrentStop(null);
+      return;
+    }
+  
+    const [currLat, currLng] = currentPosition;
+  
+    const firstPoint = gps[0];
+    const lastPoint = gps[gps.length - 1];
+  
+    const internalStops = stopPoints.filter(
+      ([lon, lat, time]) =>
+        !(
+          lat === firstPoint.latitude &&
+          lon === firstPoint.longitude &&
+          time === firstPoint.acquisition_time_unix
+        ) &&
+        !(
+          lat === lastPoint.latitude &&
+          lon === lastPoint.longitude &&
+          time === lastPoint.acquisition_time_unix
+        )
+    );
+  
+    const isStop = internalStops.find(([lon, lat]) => {
+      const dist = Math.sqrt(Math.pow(lat - currLat, 2) + Math.pow(lon - currLng, 2));
+      return dist < 0.0001;
+    });
+  
+    if (isStop) {
+      setCurrentStop([isStop[1], isStop[0]]); // [lat, lon]
+    } else {
+      setCurrentStop(null);
+    }
+  }, [currentPosition, stopPoints, gps]);
+  
+  
 
   return (
     <MapContainer
@@ -48,7 +106,11 @@ export default function MapView({ coordinates, gps, animate }: MapViewProps) {
         url="https://api.maptiler.com/maps/streets-v2/{z}/{x}/{y}.png?key=fy75DEz0GjZsgGUIX94X"
       />
       {coordinates && <RoutePolyline coordinates={coordinates} />}
+      {coordinates && coordinates.length > 0 && (
+        <Marker position={coordinates[coordinates.length - 1]} icon={destinationIcon} />
+      )}
       {currentPosition && <CarMarker position={currentPosition} direction={direction} />}{' '}
+      {currentStop && <Marker position={currentStop} icon={stopIcon} />}
     </MapContainer>
   );
 }

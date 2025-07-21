@@ -11,6 +11,7 @@ interface SidebarProps {
   onSelectRoute: (data: {
     coordinates: [number, number][] | null;
     gps: RouteData['courses'][0]['gps'] | null;
+    stopPoints?: [number, number, number][];
   }) => void;
   onStart?: () => void;
 }
@@ -20,6 +21,8 @@ const Sidebar = ({ onSelectVehicle, onSelectRoute, onStart }: SidebarProps) => {
   const [speed, setSpeed] = useState(60);
   const [routeData, setRouteData] = useState<RouteData | null>(null);
   const [selectedCourseIndex, setSelectedCourseIndex] = useState<string>('');
+  const [currentCourse, setCurrentCourse] = useState<(typeof routeData.courses)[0] | null>(null);
+  const [selectedVehicle, setSelectedVehicle] = useState<string | null>(null);
 
   useEffect(() => {
     fetchRoutes()
@@ -43,7 +46,15 @@ const Sidebar = ({ onSelectVehicle, onSelectRoute, onStart }: SidebarProps) => {
 
   const displaySpeed = selectedCourse?.speed_avg ?? routeData?.speed_avg ?? 0;
 
-  console.log('routeData', routeData);
+  function formatAddress(address: string) {
+    const parts = address.split(',');
+    const rua = parts[0]?.trim();
+    const bairro = parts[1]?.trim();
+    const cidade = parts.at(-3)?.trim();
+    const estado = parts.at(-2)?.trim();
+
+    return `${rua}, ${bairro} - ${cidade}/${estado}`;
+  }
 
   return (
     <aside className={styles.sidebar}>
@@ -56,7 +67,13 @@ const Sidebar = ({ onSelectVehicle, onSelectRoute, onStart }: SidebarProps) => {
           name="vehicle"
           onChange={(e) => {
             const value = e.target.value;
-            onSelectVehicle(value ? (routeData?.vehicle ?? null) : null);
+            if (value) {
+              setSelectedVehicle(value);
+              onSelectVehicle(routeData?.vehicle ?? null);
+            } else {
+              setSelectedVehicle(null);
+              onSelectVehicle(null);
+            }
           }}
         >
           <option value="">{t('chooseOption')}</option>
@@ -65,73 +82,102 @@ const Sidebar = ({ onSelectVehicle, onSelectRoute, onStart }: SidebarProps) => {
           )}
         </select>
       </div>
+      {selectedVehicle && (
+        <div className={styles.section}>
+          <label htmlFor="route">{t('sidebar.selectRoute')}</label>
+          <select
+            id="route"
+            name="route"
+            value={selectedCourseIndex}
+            onChange={(e) => {
+              const index = e.target.value;
+              setSelectedCourseIndex(index);
 
-      <div className={styles.section}>
-        <label htmlFor="route">{t('sidebar.selectRoute')}</label>
-        <select
-          id="route"
-          name="route"
-          value={selectedCourseIndex}
-          onChange={(e) => {
-            const index = e.target.value;
-            setSelectedCourseIndex(index);
-            const course =
-              index === '' || index === 'all' ? null : routeData?.courses[Number(index)];
+              const course =
+                index === '' || index === 'all'
+                  ? null
+                  : (routeData?.courses[Number(index)] ?? null);
 
-            onSelectRoute({
-              coordinates: course?.gps?.map((point) => [point.latitude, point.longitude]) ?? null,
-              gps: course?.gps ?? null,
-            });
-          }}
-        >
-          {/* Escolher como padrão */}
-          <option value="">{t('chooseOption')}</option>
+              setCurrentCourse(course); // <-- novo
 
-          {/* Todas as rotas */}
-          {routeData && (
-            <option value="all">
-              {`Todas as rotas  |  ${(routeData.total_distance / 1000).toFixed(1)}km - ${Math.ceil(routeData.total_time / 60)}min |
-                ${new Date(routeData.accOn).toLocaleDateString('pt-BR')}`}
-            </option>
+              onSelectRoute({
+                coordinates: course?.gps?.map((point) => [point.latitude, point.longitude]) ?? null,
+                gps: course?.gps ?? null,
+                stopPoints: course?.stop_points?.coordinates ?? [],
+              });
+            }}
+          >
+            {/* Escolher como padrão */}
+            <option value="">{t('chooseOption')}</option>
+
+            {/* Rotas individuais */}
+            {routeData?.courses?.map((course, idx) => {
+              return (
+                <option key={idx} value={String(idx)}>
+                  {`Rota ${idx + 1}  |  ${(course.distance / 1000).toFixed(1)}km - ${Math.ceil(course.duration / 60)}min`}
+                </option>
+              );
+            })}
+          </select>
+
+          {currentCourse && currentCourse.gps.length > 0 && (
+            <div className={styles.routeDetails}>
+              <div className={styles.locationBlock}>
+                <div className={styles.location}>
+                  <span className={styles.label}>
+                    <span className={styles.icon}>📍</span>
+                    {formatAddress(currentCourse.gps[0].address)}
+                  </span>
+                </div>
+                <div className={styles.location}>
+                  <span className={styles.label}>
+                    <span className={styles.icon}>🏁</span>
+                    {formatAddress(currentCourse.gps.at(-1)?.address)}
+                  </span>
+                </div>
+              </div>
+
+              <div className={styles.infoBlock}>
+                <div>
+                  <strong>Duração:</strong> {Math.ceil(currentCourse.duration / 60)} min
+                </div>
+                <div>
+                  <strong>Distância:</strong> {(currentCourse.distance / 1000).toFixed(1)} km
+                </div>
+                <div>
+                  <strong>Data:</strong>{' '}
+                  {new Date(currentCourse.start_at).toLocaleDateString('pt-BR')}
+                </div>
+                <div>
+                  <strong>Hora:</strong>{' '}
+                  {new Date(currentCourse.start_at).toLocaleTimeString('pt-BR', {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })}
+                </div>
+              </div>
+            </div>
           )}
+          {/* <div className={styles.section}>
+            <Speedometer speed={displaySpeed} />
+          </div> */}
 
-          {/* Rotas individuais */}
-          {routeData?.courses?.map((course, idx) => {
-            const start = new Date(course.start_at);
-            const formattedDate = start.toLocaleDateString('pt-BR');
-            const formattedTime = start.toLocaleTimeString('pt-BR', {
-              hour: '2-digit',
-              minute: '2-digit',
-            });
-
-            return (
-              <option key={idx} value={String(idx)}>
-                {`Rota ${idx + 1}  |  ${(course.distance / 1000).toFixed(1)}km - ${Math.ceil(course.duration / 60)}min |
-                    ${formattedDate} - ${formattedTime}`}
-              </option>
-            );
-          })}
-        </select>
-      </div>
-
-      <div className={styles.section}>
-        <Speedometer speed={displaySpeed} />
-      </div>
-
-      <div className={styles.rangeWrapper}>
-        <label htmlFor="speedRange">Velocidade:</label>
-        <input
-          type="range"
-          id="speedRange"
-          name="speedRange"
-          min="0"
-          max="120"
-          step="1"
-          value={speed}
-          onChange={handleSpeedChange}
-          style={{ '--progress': `${(speed / 120) * 100}%` } as React.CSSProperties}
-        />
-      </div>
+          {/* <div className={styles.rangeWrapper}>
+            <label htmlFor="speedRange">Velocidade:</label>
+            <input
+              type="range"
+              id="speedRange"
+              name="speedRange"
+              min="0"
+              max="120"
+              step="1"
+              value={speed}
+              onChange={handleSpeedChange}
+              style={{ '--progress': `${(speed / 120) * 100}%` } as React.CSSProperties}
+            />
+          </div> */}
+        </div>
+      )}
 
       <button className={styles.button} onClick={onStart}>
         {t('sidebar.play')}

@@ -23,6 +23,7 @@ export default function Home() {
   const [selectedRouteCoords, setSelectedRouteCoords] = useState<[number, number][] | null>(null);
   const [selectedRouteGps, setSelectedRouteGps] = useState<GpsPoint[] | null>(null);
   const [startAnimation, setStartAnimation] = useState(false);
+  const [stopPoints, setStopPoints] = useState<[number, number, number][]>([])
 
   useEffect(() => {
     if (selectedVehicle) {
@@ -43,9 +44,10 @@ export default function Home() {
       sidebar={
         <Sidebar
           onSelectVehicle={setSelectedVehicle}
-          onSelectRoute={({ coordinates, gps }) => {
+          onSelectRoute={({ coordinates, gps, stopPoints }) => {
             setSelectedRouteCoords(coordinates);
             setSelectedRouteGps(gps);
+            setStopPoints(stopPoints ?? []);
             setStartAnimation(false);
           }}
           onStart={() => setStartAnimation(true)}
@@ -64,6 +66,7 @@ export default function Home() {
       <MapView
         coordinates={selectedRouteCoords}
         gps={selectedRouteGps ?? undefined}
+        stopPoints={stopPoints}
         animate={startAnimation}
       />
     </AppLayout>
