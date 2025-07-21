@@ -34,6 +34,11 @@ export default function Home() {
     }
   }, [selectedVehicle]);
 
+  const handleResetRoute = () => {
+    setStartAnimation(false);
+    setTimeout(() => setStartAnimation(true), 100); // reinicia a animação do carro
+  };
+
   return (
     <AppLayout
       sidebar={
@@ -46,6 +51,7 @@ export default function Home() {
             setStartAnimation(false);
           }}
           onStart={() => setStartAnimation(true)}
+          onReset={handleResetRoute}
         />
       }
       vehicleCard={

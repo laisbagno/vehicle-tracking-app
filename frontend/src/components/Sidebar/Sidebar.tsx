@@ -12,11 +12,11 @@ interface SidebarProps {
     stopPoints?: [number, number, number][];
   }) => void;
   onStart?: () => void;
+  onReset?: () => void;
 }
 
-const Sidebar = ({ onSelectVehicle, onSelectRoute, onStart }: SidebarProps) => {
+const Sidebar = ({ onSelectVehicle, onSelectRoute, onStart, onReset }: SidebarProps) => {
   const { t } = useTranslation();
-  const [speed, setSpeed] = useState(60);
   const [routeData, setRouteData] = useState<RouteData | null>(null);
   const [selectedCourseIndex, setSelectedCourseIndex] = useState<string>('');
   const [currentCourse, setCurrentCourse] = useState<(typeof routeData.courses)[0] | null>(null);
@@ -32,7 +32,6 @@ const Sidebar = ({ onSelectVehicle, onSelectRoute, onStart }: SidebarProps) => {
         console.error('Erro ao buscar rotas:', error);
       });
   }, []);
-
 
   function formatAddress(address: string) {
     const parts = address.split(',');
@@ -146,12 +145,18 @@ const Sidebar = ({ onSelectVehicle, onSelectRoute, onStart }: SidebarProps) => {
               </div>
             </div>
           )}
+          <div className={styles.buttons}>
+            <button className={styles.button} onClick={onStart}>
+              {t('sidebar.play')}
+            </button>
+            {selectedVehicle && selectedCourseIndex && (
+              <button className={styles.button} onClick={onReset}>
+                {t('sidebar.reset')}
+              </button>
+            )}
+          </div>
         </div>
       )}
-
-      <button className={styles.button} onClick={onStart}>
-        {t('sidebar.play')}
-      </button>
     </aside>
   );
 };
