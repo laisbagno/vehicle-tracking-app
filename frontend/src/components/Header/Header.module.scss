@@ -1,0 +1,23 @@
+.header {
+  background-color: #06449c;
+  color: white;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 10;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  align-items: center;
+  display: flex;
+  gap: 10px;
+}
+
+.img {
+  width: 30px;
+  height: 30px;
+  border-radius: 100%;
+}

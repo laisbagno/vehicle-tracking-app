@@ -1,9 +1,26 @@
 {
-    "welcome": "Bem-vindo",
-    "start": "Iniciar",
-    "vehicleTracking": "Rastreamento de Veículos",
-    "app": {
-      "title": "Rastreamento de Veículos"
-    }
-  }
-  
+  "app": {
+    "title": "Rastreamento de Veículos"
+  },
+  "vehiclePlate": "Placa do veículo",
+  "chooseOption": "Escolher",
+  "sidebar": {
+    "title": "Painel de Controle",
+    "selectRoute": "Selecionar Rota",
+    "selectVehicle": "Selecionar Veículo",
+    "selectSpeed": "Selecionar Velocidade",
+    "route": "Rota",
+    "duration": "Duração",
+    "distance": "Distância",
+    "date": "Data",
+    "time": "Hora",
+    "play": "Iniciar",
+    "reset": "Reiniciar"
+  },
+  "vehicle": {
+  "plate": "Placa",
+  "vin": "VIN",
+  "color": "Cor",
+  "imageAlt": "Veículo {{plate}}"
+}
+}

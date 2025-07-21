@@ -1,25 +1,33 @@
 {
-    "name": "vehicle-tracking-app",
-    "private": true,
-    "workspaces": [
-        "frontend",
-        "backend"
-    ],
-    "scripts": {
-        "dev:backend": "npm run dev --workspace backend",
-        "test:backend": "npm run test --workspace backend",
-        "test": "npm run test:backend",
-        "dev:frontend": "npm run dev --workspace frontend"
-    },
-    "dependencies": {
-        "cors": "^2.8.5",
-        "express": "^5.1.0"
-    },
-    "devDependencies": {
-        "@types/cors": "^2.8.19",
-        "@types/express": "^5.0.3",
-        "@types/node": "^24.0.14",
-        "ts-node-dev": "^2.0.0",
-        "typescript": "^5.8.3"
-    }
+  "name": "vehicle-tracking-app",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "dev:backend": "npm run dev --workspace backend",
+    "test:backend": "npm run test --workspace backend",
+    "test": "npm run test:backend",
+    "dev:frontend": "npm run dev --workspace frontend",
+    "dev": "concurrently \"npm run dev --workspace backend\" \"npm run dev --workspace frontend\""
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.0.14",
+    "@typescript-eslint/eslint-plugin": "^8.37.0",
+    "@typescript-eslint/parser": "^8.37.0",
+    "concurrently": "^9.2.0",
+    "eslint": "^9.31.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.3",
+    "prettier": "^3.6.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.8.3"
+  }
 }

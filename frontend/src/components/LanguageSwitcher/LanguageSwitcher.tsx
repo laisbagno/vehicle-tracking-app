@@ -24,7 +24,6 @@ export const LanguageSwitcher = () => {
         <option value="es">Español</option>
       </select>
     </div>
-
   );
 };
 

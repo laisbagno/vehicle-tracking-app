@@ -1,9 +1,26 @@
 {
-    "welcome": "Welcome",
-    "start": "Start",
-    "vehicleTracking": "Vehicle Tracking",
-    "app": {
-      "title": "Vehicle Tracking"
-    }
-  }
-  
+  "app": {
+    "title": "Vehicle Tracking"
+  },
+  "vehiclePlate": "Vehicle Plate",
+  "chooseOption": "Choose",
+  "sidebar": {
+    "title": "Control Panel",
+    "selectRoute": "Select Route",
+    "selectVehicle": "Select Vehicle",
+    "selectSpeed": "Select Speed",
+    "route": "Route",
+    "duration": "Duration",
+    "distance": "Distance",
+    "date": "Date",
+    "time": "Time",
+    "play": "Start",
+    "reset": "Reset"
+  },
+  "vehicle": {
+  "plate": "Plate",
+  "vin": "VIN",
+  "color": "Color",
+  "imageAlt": "Vehicle {{plate}}"
+}
+}

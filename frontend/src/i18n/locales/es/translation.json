@@ -1,9 +1,26 @@
 {
-    "welcome": "Bienvenido",
-    "start": "Iniciar",
-    "vehicleTracking": "Seguimiento de Vehículos",
-    "app": {
-      "title": "Seguimiento de Vehículos"
-    }
-  }
-  
+  "app": {
+    "title": "Seguimiento de Vehículos"
+  },
+  "vehiclePlate": "Placa del vehículo",
+  "chooseOption": "Elegir",
+  "sidebar": {
+    "title": "Panel de Control",
+    "selectRoute": "Seleccionar Ruta",
+    "selectVehicle": "Seleccionar Vehículo",
+    "selectSpeed": "Seleccionar Velocidad",
+    "route": "Ruta",
+    "duration": "Duración",
+    "distance": "Distancia",
+    "date": "Fecha",
+    "time": "Hora",
+    "play": "Iniciar",
+    "reset": "Reiniciar"
+  },
+  "vehicle": {
+  "plate": "Placa",
+  "vin": "VIN",
+  "color": "Color",
+  "imageAlt": "Vehículo {{plate}}"
+}
+}
