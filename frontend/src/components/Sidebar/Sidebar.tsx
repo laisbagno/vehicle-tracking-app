@@ -1,10 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from './Sidebar.module.scss';
-import Speedometer from '../Speedometer/Speedometer';
 import { fetchRoutes } from '../../services/api';
 import type { RouteData } from '../../types/RouteData';
-import { parseGpsToCoords } from '../../utils/parseGpsToCoords';
 
 interface SidebarProps {
   onSelectVehicle: (vehicle: RouteData['vehicle'] | null) => void;
@@ -35,16 +33,6 @@ const Sidebar = ({ onSelectVehicle, onSelectRoute, onStart }: SidebarProps) => {
       });
   }, []);
 
-  const handleSpeedChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSpeed(Number(e.target.value));
-  };
-
-  const selectedCourse =
-    selectedCourseIndex === '' || selectedCourseIndex === 'all'
-      ? null
-      : routeData?.courses?.[Number(selectedCourseIndex)];
-
-  const displaySpeed = selectedCourse?.speed_avg ?? routeData?.speed_avg ?? 0;
 
   function formatAddress(address: string) {
     const parts = address.split(',');
@@ -158,24 +146,6 @@ const Sidebar = ({ onSelectVehicle, onSelectRoute, onStart }: SidebarProps) => {
               </div>
             </div>
           )}
-          {/* <div className={styles.section}>
-            <Speedometer speed={displaySpeed} />
-          </div> */}
-
-          {/* <div className={styles.rangeWrapper}>
-            <label htmlFor="speedRange">Velocidade:</label>
-            <input
-              type="range"
-              id="speedRange"
-              name="speedRange"
-              min="0"
-              max="120"
-              step="1"
-              value={speed}
-              onChange={handleSpeedChange}
-              style={{ '--progress': `${(speed / 120) * 100}%` } as React.CSSProperties}
-            />
-          </div> */}
         </div>
       )}
 

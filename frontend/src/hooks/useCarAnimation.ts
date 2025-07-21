@@ -9,8 +9,8 @@ interface GpsPoint {
 
 interface UseCarAnimationProps {
   gpsPoints: GpsPoint[];
-  stopPoints?: [number, number, number][]; // [longitude, latitude, acquisition_time_unix]
-  speed: number; // fator multiplicador (1 = tempo real, 2 = dobro da velocidade, etc)
+  stopPoints?: [number, number, number][];
+  speed: number; 
   enabled?: boolean;
 }
 
@@ -42,6 +42,7 @@ export function useCarAnimation({
 }: UseCarAnimationProps) {
   const [currentPosition, setCurrentPosition] = useState<[number, number] | null>(null);
   const [direction, setDirection] = useState<number>(0);
+  const [speedValue, setSpeedValue] = useState<number>(0);
 
   const indexRef = useRef(0);
   const animationFrameRef = useRef<number | null>(null);
@@ -113,6 +114,13 @@ export function useCarAnimation({
       const angle = calculateBearing([start.latitude, start.longitude], [end.latitude, end.longitude]);
       setDirection(angle);
 
+      const interpolatedSpeed = interpolate(
+        start.speed ?? end.speed ?? 0,
+        end.speed ?? start.speed ?? 0,
+        progress
+      );
+      
+      setSpeedValue(interpolatedSpeed);
       if (progress >= 1) {
         indexRef.current += 1;
         lastTimeRef.current = timestamp;
@@ -133,5 +141,5 @@ export function useCarAnimation({
     };
   }, [gpsPoints, speed, enabled, stopPoints]);
 
-  return { currentPosition, direction };
+  return { currentPosition, direction, speed: speedValue };
 }

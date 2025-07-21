@@ -59,12 +59,12 @@ export default function MapView({ coordinates, gps, stopPoints, animate }: MapVi
       setCurrentStop(null);
       return;
     }
-  
+
     const [currLat, currLng] = currentPosition;
-  
+
     const firstPoint = gps[0];
     const lastPoint = gps[gps.length - 1];
-  
+
     const internalStops = stopPoints.filter(
       ([lon, lat, time]) =>
         !(
@@ -78,20 +78,18 @@ export default function MapView({ coordinates, gps, stopPoints, animate }: MapVi
           time === lastPoint.acquisition_time_unix
         )
     );
-  
+
     const isStop = internalStops.find(([lon, lat]) => {
       const dist = Math.sqrt(Math.pow(lat - currLat, 2) + Math.pow(lon - currLng, 2));
       return dist < 0.0001;
     });
-  
+
     if (isStop) {
       setCurrentStop([isStop[1], isStop[0]]); // [lat, lon]
     } else {
       setCurrentStop(null);
     }
   }, [currentPosition, stopPoints, gps]);
-  
-  
 
   return (
     <MapContainer
@@ -109,7 +107,9 @@ export default function MapView({ coordinates, gps, stopPoints, animate }: MapVi
       {coordinates && coordinates.length > 0 && (
         <Marker position={coordinates[coordinates.length - 1]} icon={destinationIcon} />
       )}
-      {currentPosition && <CarMarker position={currentPosition} direction={direction} />}{' '}
+      {currentPosition && (
+        <CarMarker position={currentPosition} direction={direction}/>
+      )}{' '}
       {currentStop && <Marker position={currentStop} icon={stopIcon} />}
     </MapContainer>
   );

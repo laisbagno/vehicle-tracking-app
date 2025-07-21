@@ -1,4 +1,3 @@
-import React from 'react';
 import styles from './Speedometer.module.scss';
 
 interface SpeedometerProps {
@@ -18,9 +17,9 @@ const Speedometer = ({ speed, maxSpeed = 120 }: SpeedometerProps) => {
       <div className={styles.markers}>
         {[0, 30, 60, 90, 120].map((val) => {
           const angle = (val / maxSpeed) * 180 - 180;
-          const radius = 82;
-          const x = 100 + radius * Math.cos((angle * Math.PI) / 180);
-          const y = 100 + radius * Math.sin((angle * Math.PI) / 180);
+          const radius = 35;
+          const x = 50 + radius * Math.cos((angle * Math.PI) / 180);
+          const y = 50 + radius * Math.sin((angle * Math.PI) / 180);
 
           return (
             <div
