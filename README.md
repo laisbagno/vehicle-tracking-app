@@ -110,6 +110,10 @@ npm run dev
 - Armazenamento persistente de histórico de rotas.
 
 ---
+## 📸 Preview do projeto
+<img width="1918" height="908" alt="image" src="https://github.com/user-attachments/assets/aeeb67e7-59c5-437d-a086-2c03824859a4" />
+
+---
 
 ## 👩‍💻 Autora
 
