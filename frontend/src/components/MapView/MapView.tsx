@@ -1,4 +1,3 @@
-// src/components/MapView/MapView.tsx
 import { MapContainer, TileLayer, ZoomControl, Polyline, useMap, Marker } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useEffect, useState } from 'react';
@@ -15,7 +14,7 @@ interface MapViewProps {
     longitude: number;
     direction: number;
   }[];
-  stopPoints?: [number, number, number][]; // <- Novo!
+  stopPoints?: [number, number, number][];
   animate?: boolean;
 }
 
@@ -85,7 +84,7 @@ export default function MapView({ coordinates, gps, stopPoints, animate }: MapVi
     });
 
     if (isStop) {
-      setCurrentStop([isStop[1], isStop[0]]); // [lat, lon]
+      setCurrentStop([isStop[1], isStop[0]]); 
     } else {
       setCurrentStop(null);
     }

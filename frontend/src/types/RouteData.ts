@@ -1,6 +1,3 @@
-// src/types/RouteData.ts
-
-
 export interface GpsPoint {
   latitude: number;
   longitude: number;
@@ -10,7 +7,7 @@ export interface GpsPoint {
   acquisition_time_unix: number;
 }
 export interface Course {
-  id: number; // você pode gerar depois com base no índice
+  id: number;
   distance: number;
   duration: number;
   speed_max: number;

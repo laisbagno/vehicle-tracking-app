@@ -1,4 +1,3 @@
-// Home.tsx
 import { useEffect, useState } from 'react';
 import AppLayout from '../../components/layouts/AppLayout';
 import Sidebar from '../../components/Sidebar/Sidebar';
@@ -24,10 +23,9 @@ export default function Home() {
 
   useEffect(() => {
     if (selectedVehicle) {
-      setVisibleVehicle(selectedVehicle); // atualiza o card
+      setVisibleVehicle(selectedVehicle);
       setIsVisible(true);
     } else {
-      // inicia fade-out e só depois apaga os dados
       setIsVisible(false);
       const timeout = setTimeout(() => setVisibleVehicle(null), 300);
       return () => clearTimeout(timeout);
@@ -36,7 +34,7 @@ export default function Home() {
 
   const handleResetRoute = () => {
     setStartAnimation(false);
-    setTimeout(() => setStartAnimation(true), 100); // reinicia a animação do carro
+    setTimeout(() => setStartAnimation(true), 100);
   };
 
   return (

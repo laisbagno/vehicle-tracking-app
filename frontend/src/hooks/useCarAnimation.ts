@@ -84,7 +84,6 @@ export function useCarAnimation({
       const start = gpsPoints[i];
       const end = gpsPoints[i + 1];
 
-      // Detecta se o ponto atual é uma parada
       const isStopPoint = stopPoints.some(
         ([lon, lat, time]) =>
           lat === start.latitude &&
@@ -98,7 +97,7 @@ export function useCarAnimation({
           indexRef.current += 1;
           lastTimeRef.current = null;
           animationFrameRef.current = requestAnimationFrame(animate);
-        }, 2000); // pausa de 2 segundos
+        }, 2000);
         return;
       }
 
@@ -119,7 +118,7 @@ export function useCarAnimation({
         end.speed ?? start.speed ?? 0,
         progress
       );
-      
+
       setSpeedValue(interpolatedSpeed);
       if (progress >= 1) {
         indexRef.current += 1;

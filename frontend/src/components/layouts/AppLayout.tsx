@@ -1,4 +1,3 @@
-// AppLayout.tsx
 
 import type { ReactNode } from 'react';
 import styles from './AppLayout.module.scss';

@@ -85,7 +85,7 @@ const Sidebar = ({ onSelectVehicle, onSelectRoute, onStart, onReset }: SidebarPr
                   ? null
                   : (routeData?.courses[Number(index)] ?? null);
 
-              setCurrentCourse(course); // <-- novo
+              setCurrentCourse(course);
 
               onSelectRoute({
                 coordinates: course?.gps?.map((point) => [point.latitude, point.longitude]) ?? null,
