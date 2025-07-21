@@ -31,7 +31,6 @@ const stopIcon = L.icon({
 });
 
 export default function MapView({ coordinates, gps, stopPoints, animate }: MapViewProps) {
-  console.log('GPS PASSED:', gps);
   function RoutePolyline({ coordinates }: { coordinates: [number, number][] }) {
     const map = useMap();
     useEffect(() => {
@@ -49,7 +48,6 @@ export default function MapView({ coordinates, gps, stopPoints, animate }: MapVi
     speed: 50,
     enabled: animate,
   });
-  console.log('gps:', gps, direction);
 
   const [currentStop, setCurrentStop] = useState<[number, number] | null>(null);
 
