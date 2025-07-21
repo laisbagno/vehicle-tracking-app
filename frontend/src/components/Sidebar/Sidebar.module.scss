@@ -47,7 +47,16 @@
   }
 }
 
+.buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+  flex-wrap: wrap; // se quiser que empilhe no mobile
+}
+
 .button {
+  flex: 1; // faz os botões ocuparem o mesmo espaço
+  min-width: 100px; // define um limite mínimo para não ficar pequeno demais
   padding: 0.75rem 1.5rem;
   border: none;
   border-radius: 6px;
